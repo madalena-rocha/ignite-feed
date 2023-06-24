@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 // O react-dom é a integração do react com a DOM, que é a representação do HTML através do JavaScript, 
 // ou seja, ao importar o react-dom, estamos integrando o rect para funcionar no ambiente web, no browser
-import App from './App'
+import { App } from './App.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
