@@ -5,7 +5,7 @@
 import { Header } from './components/Header.jsx';
 import { Post } from './Post.jsx';
 
-import './styles.css';
+import './global.css';
 
 export function App() {
   return (
