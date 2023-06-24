@@ -1,0 +1,9 @@
+/* Extensão .module.css para que o css fique totalmente atrelado ao componente Header 
+e não interfira em outros elementos
+Ao trabalhar com CSS Modules, utiliza-se preferencialmente classes ao invés de outros 
+tipos de seletores */
+
+.header {
+  background: #333;
+  height: 80px;
+}
