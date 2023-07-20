@@ -1,0 +1,16 @@
+.avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 8px;
+}
+
+.avatarWithBorder {
+  /* box-sizing: initial; como utilizou border e outline, a imagem ficou muito pequena */
+  /* resetando essa propriedade para que não esprema o elemento para caber dentro do container */
+  /* outra forma de resolver esse problema é utilizando o calc */
+  width: calc(3rem + 12px);
+  height: calc(3rem + 12px);
+  border-radius: 8px;
+  border: 4px solid var(--gray-800);
+  outline: 2px solid var(--green-500);
+}
