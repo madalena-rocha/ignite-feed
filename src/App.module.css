@@ -8,3 +8,13 @@
   gap: 2rem;
   align-items: flex-start; /* o padrão é stretch, onde a sidebar vai ocupar a mesma altura da timeline */
 }
+
+@media (max-width: 768px) {
+  html {
+    font-size: 87.5%; /* altera o tamanho de todos os elementos que utilizam rem como unidade de medida */
+  }
+
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
+}
