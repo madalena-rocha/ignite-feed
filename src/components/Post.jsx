@@ -24,9 +24,10 @@ export function Post({ author, publishedAt, content }) {
   // Ao criar um estado dentro de um componente, ele fica no escopo desse componente, ou seja, 
   // um componente não compartilha as informações do estado com outro componente, apesar de ambos serem o Post
   const [comments, setComments] = useState([
-    1,
-    2,
+    'Post muito bacana, hein?!',
   ]);
+
+  const [newCommentText, setNewCommentText] = useState('');
   
   const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
     locale: ptBR,
@@ -36,7 +37,7 @@ export function Post({ author, publishedAt, content }) {
   const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
     locale: ptBR,
     addSuffix: true,
-  })
+  });
 
   // Sempre que a função está sendo disparada através de uma ação do usuário, 
   // seu nome geralmente começa com handle
@@ -47,9 +48,17 @@ export function Post({ author, publishedAt, content }) {
     // evitar o comportamento padrão do HTML
     event.preventDefault();
     
-    setComments([...comments, comments.length + 1]);
+    setComments([...comments, newCommentText]);
     // Imutabilidade: não passar somente o que quer inserir, passar o novo valor
     // Spread Operator: lê o valor da variável e copia os valores que já existem nela
+
+    setNewCommentText(''); // limpar a textarea após publicar o comentário
+  }
+
+  function handleNewCommentChange() {
+    setNewCommentText(event.target.value);
+    // event.target retorna o elemento que está recebendo o evento
+    // neste caso, a textarea, onde está o evento onChange
   }
 
   return (
@@ -74,9 +83,12 @@ export function Post({ author, publishedAt, content }) {
       <div className={styles.content}>
         {content.map(line => {
           if (line.type === 'paragraph') {
-            return <p>{line.content}</p>;
+            return <p key={line.content}>{line.content}</p>;
           } else if (line.type === 'link') {
-            return <p><a href="#">{line.content}</a></p>;
+            return <p key={line.content}><a href="#">{line.content}</a></p>;
+            // colocar a key no primeiro elemento do retorno de um map
+            // a key precisa ser única dentro da renderização de um componente
+            // se houver outro componente com a mesma key não tem problema
           }
         })}
       </div>
@@ -86,7 +98,10 @@ export function Post({ author, publishedAt, content }) {
         <strong>Deixe seu feedback</strong>
 
         <textarea
+          name="comment"
           placeholder="Deixe um comentário"
+          value={newCommentText}
+          onChange={handleNewCommentChange}
         />
 
         <footer>
@@ -96,7 +111,7 @@ export function Post({ author, publishedAt, content }) {
 
       <div className={styles.commentList}>
         {comments.map(comment => {
-          return <Comment />
+          return <Comment key={comment} content={comment} />
         })}
       </div>
     </article>
