@@ -1,4 +1,4 @@
-import { format, formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow, set } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { useState } from 'react';
 
@@ -61,6 +61,19 @@ export function Post({ author, publishedAt, content }) {
     // neste caso, a textarea, onde está o evento onChange
   }
 
+  function deleteComment(commentToDelete) {
+    const commentsWithoutDeletedOne = comments.filter(comment => {
+      return comment !== commentToDelete;
+    })
+    // o filter percorre cada comentário e, caso retorne true, mantém na lista, caso contrário, remove da lista
+
+    setComments(commentsWithoutDeletedOne);
+    // setComments deve receber o valor esperado contido no estado de comentários após a remoção do comentário
+    // Imutabilidade: não altera o valor de uma variável na memória, e sim cria um novo espaço na memória
+    // Mais performático, pois o react tem duas versões da variável para comparar e ver o que mudou, 
+    // diferente de alterar diretamente o valor na posição que está na memória, não havendo uma fonte de comparação
+  }
+
   return (
     <article className={styles.post}>
       <header>
@@ -111,7 +124,16 @@ export function Post({ author, publishedAt, content }) {
 
       <div className={styles.commentList}>
         {comments.map(comment => {
-          return <Comment key={comment} content={comment} />
+          return (
+            <Comment 
+              key={comment} 
+              content={comment} 
+              onDeleteComment={deleteComment} 
+              // ao enviar funções para um componente como propriedades, 
+              // funções que serão disparadas a partir de uma ação do usuário, 
+              // geralmente o nome da propriedade começa com on
+            />
+          )
         })}
       </div>
     </article>
