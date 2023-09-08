@@ -56,9 +56,14 @@ export function Post({ author, publishedAt, content }) {
   }
 
   function handleNewCommentChange() {
+    event.target.setCustomValidity('');
     setNewCommentText(event.target.value);
     // event.target retorna o elemento que está recebendo o evento
     // neste caso, a textarea, onde está o evento onChange
+  }
+
+  function handleNewCommentInvalid() {
+    event.target.setCustomValidity('Esse campo é obrigatório!');
   }
 
   function deleteComment(commentToDelete) {
@@ -73,6 +78,8 @@ export function Post({ author, publishedAt, content }) {
     // Mais performático, pois o react tem duas versões da variável para comparar e ver o que mudou, 
     // diferente de alterar diretamente o valor na posição que está na memória, não havendo uma fonte de comparação
   }
+
+  const isNewCommentEmpty = newCommentText.length === 0;
 
   return (
     <article className={styles.post}>
@@ -115,10 +122,15 @@ export function Post({ author, publishedAt, content }) {
           placeholder="Deixe um comentário"
           value={newCommentText}
           onChange={handleNewCommentChange}
+          onInvalid={handleNewCommentInvalid}
+          // chamada sempre que o HTML identificar que o usuário tentou realizar o submit do formulário, mas o texto desse campo era inválido
+          required
         />
 
         <footer>
-          <button type="submit">Publicar</button>
+          <button type="submit" disabled={isNewCommentEmpty}>
+            Publicar
+          </button>
         </footer>
       </form>
 
