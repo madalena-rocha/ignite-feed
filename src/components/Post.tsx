@@ -18,15 +18,20 @@ interface Content {
   content: string;
 }
 
-interface PostProps {
+export interface PostType {
+  id: number;
   author: Author;
   publishedAt: Date;
   content: Content[];
 }
 
+interface PostProps {
+  post: PostType;
+}
+
 // Dentro de objetos não é possível definir a tipagem na propriedade do objeto
 // Necessário informar o formato do objeto inteiro
-export function Post({ author, publishedAt, content }: PostProps) {
+export function Post({ post }: PostProps) {
   // O React não fica observando o valor da variável comentários para quando ela mudar ele mostrar os novos comentários em tela
   // Estados são variáveis que o componente deve monitorar
   // Criar estado sempre que quiser que quando o valor da variável mude o React mostre as novas informações de acordo com a mudança de valor
@@ -48,12 +53,12 @@ export function Post({ author, publishedAt, content }: PostProps) {
 
   const [newCommentText, setNewCommentText] = useState('');
   
-  const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
+  const publishedDateFormatted = format(post.publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
     locale: ptBR,
   });
 
   // Armazena a data de publicação do post relativa à data atual
-  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+  const publishedDateRelativeToNow = formatDistanceToNow(post.publishedAt, {
     locale: ptBR,
     addSuffix: true,
   });
@@ -110,23 +115,23 @@ export function Post({ author, publishedAt, content }: PostProps) {
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src={author.avatarUrl} />
+          <Avatar src={post.author.avatarUrl} />
 
           <div className={styles.authorInfo}>
-            <strong>{author.name}</strong>
-            <span>{author.role}</span>
+            <strong>{post.author.name}</strong>
+            <span>{post.author.role}</span>
           </div>
         </div>
 
         {/* O atributo dateTime mostra a data da publicação na inspeção do HTML 
         O atributo title mostra a data da publicação quando o usuário passa o mouse em cima do time */}
-        <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>
+        <time title={publishedDateFormatted} dateTime={post.publishedAt.toISOString()}>
           {publishedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
-        {content.map(line => {
+        {post.content.map(line => {
           if (line.type === 'paragraph') {
             return <p key={line.content}>{line.content}</p>;
           } else if (line.type === 'link') {

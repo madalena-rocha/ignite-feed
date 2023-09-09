@@ -2,14 +2,14 @@
 // Os componentes da aplicação React precisam ter extensão JSX
 // JSX = JavaScript + XML (HTML)
 
-import { Header } from './components/Header.jsx';
-import { Post } from './components/Post.jsx';
-import { Sidebar } from './components/Sidebar.jsx';
+import { Header } from './components/Header';
+import { Post, PostType } from './components/Post';
+import { Sidebar } from './components/Sidebar';
 
 import styles from './App.module.css';
 import './global.css';
 
-const posts = [
+const posts: PostType[] = [
   {
     id: 1,
     author: {
@@ -58,9 +58,7 @@ export function App() {
             return (
               <Post
                 key={post.id}
-                author={post.author}
-                content={post.content}
-                publishedAt={post.publishedAt}
+                post={post}
               />
             )
           })}
