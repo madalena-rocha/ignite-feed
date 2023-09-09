@@ -1,13 +1,32 @@
-import { format, formatDistanceToNow, set } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react';
 
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
 
 import styles from './Post.module.css';
 
-export function Post({ author, publishedAt, content }) {
+interface Author {
+  name: string;
+  role: string;
+  avatarUrl: string;
+}
+
+interface Content {
+  type: 'paragraph' | 'link';
+  content: string;
+}
+
+interface PostProps {
+  author: Author;
+  publishedAt: Date;
+  content: Content[];
+}
+
+// Dentro de objetos não é possível definir a tipagem na propriedade do objeto
+// Necessário informar o formato do objeto inteiro
+export function Post({ author, publishedAt, content }: PostProps) {
   // O React não fica observando o valor da variável comentários para quando ela mudar ele mostrar os novos comentários em tela
   // Estados são variáveis que o componente deve monitorar
   // Criar estado sempre que quiser que quando o valor da variável mude o React mostre as novas informações de acordo com a mudança de valor
@@ -41,7 +60,10 @@ export function Post({ author, publishedAt, content }) {
 
   // Sempre que a função está sendo disparada através de uma ação do usuário, 
   // seu nome geralmente começa com handle
-  function handleCreateNewComment() {
+  // O TypeScript não sabe o que é o event
+  // Todas as funções que vêm através de eventos do JS automaticamente o HTML passa para elas como primeiro parâmetro o evento
+  // O TS não consegue determinar automaticamente qual é o tipo do evento
+  function handleCreateNewComment(event: FormEvent ) {
     // Ao realizar o submit num formulário no HTML, o comportamento padrão 
     // é redirecionar o usuário para alguma página
     // No React, para manter o usuário na mesma página (SPA), é necessário 
@@ -55,18 +77,21 @@ export function Post({ author, publishedAt, content }) {
     setNewCommentText(''); // limpar a textarea após publicar o comentário
   }
 
-  function handleNewCommentChange() {
+  // Como o ChangeEvent não foi disparado pelo formulário e sim por um dos campos do formulário, é necessário informar isso para o TS
+  // Generics são para a tipagem do TS como são parâmetros para as funções do JS
+  // Informar por qual elemento do formulário o evento foi disparado
+  function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity('');
     setNewCommentText(event.target.value);
     // event.target retorna o elemento que está recebendo o evento
     // neste caso, a textarea, onde está o evento onChange
   }
 
-  function handleNewCommentInvalid() {
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity('Esse campo é obrigatório!');
   }
 
-  function deleteComment(commentToDelete) {
+  function deleteComment(commentToDelete: string) {
     const commentsWithoutDeletedOne = comments.filter(comment => {
       return comment !== commentToDelete;
     })

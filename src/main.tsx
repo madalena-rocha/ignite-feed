@@ -6,7 +6,8 @@ import ReactDOM from 'react-dom/client'
 // ou seja, ao importar o react-dom, estamos integrando o rect para funcionar no ambiente web, no browser
 import { App } from './App.jsx'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+// O TypeScript alerta que o document.getElementById('root') pode ser nulo, pois o root pode não existir
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
